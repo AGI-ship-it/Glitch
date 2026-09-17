@@ -32,6 +32,7 @@ jobs:
       - run: npm run build
         env:
           PAGES_BASE: /${{ github.event.repository.name }}/
+          VITE_FLOW: stepper-within
 
       - uses: actions/upload-pages-artifact@v3
         with:
