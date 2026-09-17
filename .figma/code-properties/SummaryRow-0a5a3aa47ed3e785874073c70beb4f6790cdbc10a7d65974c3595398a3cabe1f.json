@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "componentName": "SummaryRow",
+    "filePath": "src/components/ui.tsx"
+  },
+  "codeProperties": {
+    "label": {
+      "type": "string",
+      "name": "Label",
+      "description": "The left-hand label text."
+    },
+    "value": {
+      "type": "string",
+      "name": "Value",
+      "description": "The right-hand value text."
+    },
+    "strong": {
+      "type": "boolean",
+      "name": "Strong",
+      "description": "When true, renders the row in a bold, larger style for totals.",
+      "defaultValue": false
+    }
+  }
+}

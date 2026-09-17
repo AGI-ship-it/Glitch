@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "componentName": "PageHeading",
+    "filePath": "src/components/ui.tsx"
+  },
+  "codeProperties": {
+    "title": {
+      "type": "string",
+      "name": "Title",
+      "description": "The main heading text."
+    },
+    "intro": {
+      "type": "string",
+      "name": "Intro",
+      "description": "Optional supporting paragraph shown below the heading."
+    },
+    "crumb": {
+      "type": "string",
+      "name": "Crumb",
+      "description": "Optional breadcrumb label shown above the heading."
+    }
+  }
+}

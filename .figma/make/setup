@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Runs once on first open. System-level prerequisites only.
+set -euo pipefail
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "node is required but was not found on PATH" >&2
+  exit 1
+fi
+
+if ! command -v npm >/dev/null 2>&1; then
+  echo "npm is required but was not found on PATH" >&2
+  exit 1
+fi
+
+echo "setup: node $(node -v), npm $(npm -v) — ok"

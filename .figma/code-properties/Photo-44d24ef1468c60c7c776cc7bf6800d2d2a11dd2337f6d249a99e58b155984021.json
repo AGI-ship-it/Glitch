@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "componentName": "Photo",
+    "filePath": "src/components/ui.tsx"
+  },
+  "codeProperties": {
+    "label": {
+      "type": "string",
+      "name": "Label",
+      "description": "Alt text / placeholder label for the image slot."
+    },
+    "seed": {
+      "type": "number",
+      "name": "Seed",
+      "description": "Seed used to vary the placeholder pattern when no src is provided.",
+      "defaultValue": 0
+    },
+    "src": {
+      "type": "string",
+      "name": "Src",
+      "description": "Brand photography URL. Without one the slot falls back to a labelled placeholder."
+    },
+    "position": {
+      "type": "string",
+      "name": "Position",
+      "description": "CSS object-position class applied to the image.",
+      "defaultValue": "object-center"
+    }
+  }
+}

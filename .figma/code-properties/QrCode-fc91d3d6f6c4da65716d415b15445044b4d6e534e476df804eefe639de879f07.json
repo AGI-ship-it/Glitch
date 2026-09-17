@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "componentName": "QrCode",
+    "filePath": "src/components/ui.tsx"
+  },
+  "codeProperties": {
+    "value": {
+      "type": "string",
+      "name": "Value",
+      "description": "The booking reference string encoded in the QR code."
+    },
+    "size": {
+      "type": "number",
+      "name": "Size",
+      "description": "Width and height of the rendered SVG in pixels.",
+      "defaultValue": 180
+    }
+  }
+}

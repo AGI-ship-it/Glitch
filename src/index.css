@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink ring-offset-2;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8;
+  }
+
+  /* Pills throughout, matching the nav and the hero search bar. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent px-6 text-[15px] font-semibold transition
+           disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-lg {
+    @apply h-14 text-[17px];
+  }
+
+  .btn-md {
+    @apply h-12;
+  }
+
+  .btn-sm {
+    @apply h-10 px-4 text-[14px];
+  }
+
+  .btn-primary {
+    @apply bg-ink text-white transition hover:-translate-y-0.5 hover:bg-black hover:shadow-pop;
+  }
+
+  /* Conversion moments — auth and payment steps that move the booking forward. */
+  .btn-cta {
+    @apply bg-brand-magenta text-white transition hover:-translate-y-0.5 hover:brightness-110 hover:shadow-pop;
+  }
+
+  /* Repeated per-card actions (court grids, offers) — stays quiet at rest so it
+     doesn't compete with the one primary magenta CTA per page, but confirms itself
+     in brand colour on hover/focus rather than a generic black fill. */
+  .btn-outline {
+    @apply border-ink bg-white text-ink hover:border-brand-magenta hover:bg-brand-magenta hover:text-white;
+  }
+
+  .btn-quiet {
+    @apply border-line-strong bg-white text-ink hover:border-ink;
+  }
+
+  .card {
+    @apply rounded-[28px] border border-line bg-white shadow-card;
+  }
+
+  .label {
+    @apply mb-2 block text-[13px] font-semibold uppercase tracking-[0.08em] text-muted;
+  }
+
+  .field {
+    @apply h-14 w-full rounded-[18px] border border-line-strong bg-white px-4 text-[15px] text-ink
+           placeholder:text-muted/70 focus:border-ink focus:outline-none focus:ring-0;
+  }
+
+  .eyebrow {
+    @apply text-[12px] font-bold uppercase tracking-[0.18em] text-muted;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-line-strong px-3 py-1 text-[13px] font-medium;
+  }
+
+}

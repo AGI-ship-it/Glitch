@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Installs project dependencies. Runs on every project open.
+set -euo pipefail
+
+cd "$(dirname "$0")/../.."
+
+# Use a project-local npm cache: the machine's global ~/.npm cache has
+# root-owned entries that block installs for this user account.
+export npm_config_cache="$PWD/.figma/make/.npm-cache"
+
+if [ -f package-lock.json ]; then
+  npm ci
+else
+  npm install
+fi

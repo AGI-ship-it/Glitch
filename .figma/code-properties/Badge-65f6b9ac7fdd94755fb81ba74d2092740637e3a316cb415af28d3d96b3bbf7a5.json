@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "componentName": "Badge",
+    "filePath": "src/components/ui.tsx"
+  },
+  "codeProperties": {
+    "tone": {
+      "type": "string",
+      "name": "Tone",
+      "description": "Visual style of the badge.",
+      "defaultValue": "dark",
+      "options": [
+        "dark",
+        "light"
+      ],
+      "control": {
+        "type": "select",
+        "labels": {
+          "dark": "Dark",
+          "light": "Light"
+        }
+      }
+    }
+  }
+}

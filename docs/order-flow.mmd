@@ -1,0 +1,53 @@
+flowchart LR
+    Home["Home — /<br/>Hero, search bar, booking picker"]
+    Courts["Sports and courts — /courts"]
+    Book["Slot picker — /book/:courtId"]
+
+    Gate{"Signed in?"}
+    Login["Login — /login?next=/cart"]
+    Signup["Sign up — /signup"]
+
+    Cart["Cart — /cart<br/>Slots held 10 minutes"]
+    Lapsed["Hold lapses or page reloads<br/>Cart empties, courts back on sale"]
+
+    Checkout["Checkout — /checkout<br/>Contact details"]
+    Waiver["Waiver — /waiver<br/>External: near.tl<br/>Signature required, parent signs for under-18s"]
+    Payment["Payment — /payment<br/>External: CCAvenue"]
+    Outcome{"Gateway outcome"}
+    Confirmation["Confirmation — /confirmation<br/>Booking reference + QR code"]
+
+    Bookings["My bookings — /account/bookings"]
+    Detail["Booking details — /account/bookings/:reference"]
+    Reschedule["Reschedule — .../reschedule"]
+    Cancel["Cancel — .../cancel"]
+    Cancelled["Cancelled — .../cancelled"]
+
+    Home -->|Continue| Gate
+    Courts --> Book
+    Book -->|Continue| Gate
+
+    Gate -->|No| Login
+    Gate -->|Yes| Cart
+    Login -->|No account yet| Signup
+    Login -->|Log in| Cart
+    Signup -->|Create account| Cart
+
+    Cart -->|Checkout| Checkout
+    Cart -->|Timer runs out| Lapsed
+    Lapsed --> Home
+
+    Checkout -->|Save details| Waiver
+    Waiver -->|Sign| Payment
+    Payment --> Outcome
+
+    Outcome -->|Approved| Confirmation
+    Outcome -->|Failed| Cart
+    Outcome -->|Cancelled| Cart
+    Cart -->|Retry, waiver already signed| Payment
+
+    Confirmation --> Bookings
+    Bookings --> Detail
+    Detail -->|Free until 24h before| Reschedule
+    Detail -->|Free until 24h before| Cancel
+    Reschedule --> Detail
+    Cancel --> Cancelled

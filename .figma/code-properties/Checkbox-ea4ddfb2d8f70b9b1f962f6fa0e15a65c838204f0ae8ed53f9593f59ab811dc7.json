@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "componentName": "Checkbox",
+    "filePath": "src/components/ui.tsx"
+  },
+  "codeProperties": {
+    "checked": {
+      "type": "boolean",
+      "name": "Checked",
+      "description": "Controlled checked state of the checkbox."
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "name": "Default Checked",
+      "description": "Initial checked state when uncontrolled."
+    },
+    "required": {
+      "type": "boolean",
+      "name": "Required",
+      "description": "Marks the checkbox as required in a form."
+    },
+    "disabled": {
+      "type": "boolean",
+      "name": "Disabled",
+      "description": "Disables the checkbox interaction."
+    },
+    "align": {
+      "type": "string",
+      "name": "Align",
+      "description": "Vertical alignment of the checkbox box relative to its label. Use 'start' for multiline labels.",
+      "defaultValue": "start",
+      "options": [
+        "start",
+        "center"
+      ],
+      "control": {
+        "type": "select",
+        "labels": {
+          "start": "Start",
+          "center": "Center"
+        }
+      }
+    }
+  }
+}

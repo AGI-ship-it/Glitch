@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Starts the Vite dev server. Bound to the port defined in ./env.
+set -euo pipefail
+
+cd "$(dirname "$0")/../.."
+
+set -a
+. .figma/make/env
+set +a
+
+exec npx vite --host --port "$PORT" --strictPort
