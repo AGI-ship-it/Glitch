@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // GitHub Pages serves the site under /<repo>/, but asset paths in src are written
 // root-absolute as plain strings, which Vite's base option does not rewrite.
-const ASSET_RE = /(?<![\w/.-])\/(?:offers|brand|venue)\/[A-Za-z0-9._/-]+\.(?:png|jpe?g|webp|svg)/g
+const ASSET_RE = /(?<![\w/.-])\/(?:offers|brand|venue|semnox)\/[A-Za-z0-9._/-]+\.(?:png|jpe?g|webp|svg)/g
 
 const prefixAssets = (base: string): Plugin => ({
   name: 'prefix-public-assets',

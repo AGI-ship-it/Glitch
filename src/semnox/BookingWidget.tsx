@@ -10,6 +10,9 @@ import { aed } from '../mocks/semnox'
 const LEFT_CUT = 'polygon(0 0, 56% 0, 44% 100%, 0 100%)'
 const RIGHT_CUT = 'polygon(56% 0, 100% 0, 100% 100%, 44% 100%)'
 
+/** Written out in full so the Pages build can prefix them with the site base. */
+const SPORT_ICON = { basketball: '/semnox/icon-basketball.svg', volleyball: '/semnox/icon-volleyball.svg' }
+
 function SportPill({ sport, side }: { sport: 'basketball' | 'volleyball'; side: 'left' | 'right' }) {
   return (
     <span
@@ -17,7 +20,7 @@ function SportPill({ sport, side }: { sport: 'basketball' | 'volleyball'; side: 
         side === 'left' ? 'left-[10px]' : 'right-[10px]'
       }`}
     >
-      <img src={`/semnox/icon-${sport}.svg`} alt="" width={16} height={16} />
+      <img src={SPORT_ICON[sport]} alt="" width={16} height={16} />
       {sport}
     </span>
   )
