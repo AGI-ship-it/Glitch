@@ -210,8 +210,7 @@ export function DatePicker({
       </button>
 
       {open && (
-        /* Semnox's stock calendar widget — it can't be re-skinned, so it keeps the
-           plain system look: grey bevelled cells, bordered month bar, round arrows. */
+        /* Semnox's stock calendar layout, re-skinned in Glitch colours (see .sx-cal). */
         <div
           role="dialog"
           aria-modal="false"
@@ -228,7 +227,7 @@ export function DatePicker({
               className="sx-cal-arrow"
             >
               <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true">
-                <path d="M6 0v8L1 4z" fill="currentColor" />
+                <path d="M5.5 1.5 3 4l2.5 2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
             </button>
             <p aria-live="polite" className="sx-cal-month flex-1">
@@ -242,7 +241,7 @@ export function DatePicker({
               className="sx-cal-arrow"
             >
               <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true">
-                <path d="M2 0v8l5-4z" fill="currentColor" />
+                <path d="M2.5 1.5 5 4 2.5 6.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
             </button>
           </div>
