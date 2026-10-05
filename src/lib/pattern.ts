@@ -33,7 +33,7 @@ const BAR = {
 /** Rows per tile — enough for the step to come back into phase with the period. */
 const ROWS = BAR.period / BAR.step
 
-function steppedBars(fill: string = BAR.ink) {
+export function steppedBars(fill: string = BAR.ink) {
   const height = BAR.row * ROWS
   const bars: string[] = []
 

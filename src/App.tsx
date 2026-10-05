@@ -17,6 +17,8 @@ import CancelPage from './pages/account/CancelPage'
 import CancelledPage from './pages/account/CancelledPage'
 import PersonalInfoPage from './pages/account/PersonalInfoPage'
 import { LegalPage } from './pages/LegalPage'
+import SemnoxApp from './semnox/SemnoxApp'
+import GlitchArabiaPage from './pages/GlitchArabiaPage'
 
 export default function App() {
   return (
@@ -24,6 +26,10 @@ export default function App() {
       {/* near.tl and CCAvenue sit outside the product — no Glitch chrome. */}
       <Route path="/waiver" element={<WaiverPage />} />
       <Route path="/payment" element={<PaymentPage />} />
+      {/* Coded prototype of the Semnox Parafait flow — its own chrome and tokens. */}
+      <Route path="/semnox/*" element={<SemnoxApp />} />
+      {/* Stand-in for glitcharabia.com, the entry point into Glitch Sports booking. */}
+      <Route path="/glitcharabia" element={<GlitchArabiaPage />} />
 
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import ExternalChrome from '../components/ExternalChrome'
 import { courtById } from '../data/catalog'
@@ -164,25 +164,79 @@ function FieldError({ children }: { children: string }) {
   return <p className="mt-1.5 text-[13px] font-medium text-[#c02342]">{children}</p>
 }
 
+/** What the gateway needs from whichever booking flow handed off to it. */
+export type PaymentSource = {
+  lines: { id: string; label: string }[]
+  total: number
+  holder: string
+  phone: string
+  /** Lines still held; the transaction dies if this reaches zero before approval. */
+  cartCount: number
+  secondsLeft: number
+  waiverSigned: boolean
+  /** Settles the order. False when the hold lapsed in flight. */
+  pay: () => boolean
+  paths: { cart: string; waiver: string }
+  /** Where the return leg lands. */
+  returnTo: () => string
+}
+
 export default function PaymentPage() {
-  const navigate = useNavigate()
   const { state, cartTotals, secondsLeft, pay } = useStore()
+  const d = state.checkout.details
+  return (
+    <PaymentGateway
+      source={{
+        lines: state.cart.map((item) => ({
+          id: item.id,
+          label: `${courtById(item.courtId)!.name} · ${formatShortDate(item.dateKey)} · ${rangeLabel(
+            Math.min(...item.hours),
+            item.hours.length,
+          )}`,
+        })),
+        total: cartTotals.total,
+        holder: d ? `${d.firstName} ${d.lastName}`.trim() : '',
+        phone: d?.phone ?? state.account?.phone ?? '+971 50 000 0000',
+        cartCount: state.cart.length,
+        secondsLeft,
+        waiverSigned: state.checkout.waiverSigned,
+        pay: () => pay().length > 0,
+        paths: { cart: '/cart', waiver: '/waiver' },
+        // Back to whichever page was running the accordion, so the reference lands
+        // in the same place the booking was made rather than on a separate screen.
+        returnTo: () => {
+          let back: string | null = null
+          try {
+            back = sessionStorage.getItem('gs:return-to')
+            sessionStorage.removeItem('gs:return-to')
+          } catch {
+            back = null
+          }
+          return back ?? '/confirmation'
+        },
+      }}
+    />
+  )
+}
+
+export function PaymentGateway({ source }: { source: PaymentSource }) {
+  const navigate = useNavigate()
+  const { secondsLeft, cartCount, paths } = source
+  // The timed legs read the latest source without restarting on every timer tick.
+  const sourceRef = useRef(source)
+  sourceRef.current = source
 
   const [phase, setPhase] = useState<Phase>('handoff')
   const [method, setMethod] = useState('card')
 
   // Card form — prefilled with a demo card so the happy path is one click; still
   // fully editable (end the number in 0002 to rehearse a decline).
-  const [card, setCard] = useState(() => {
-    const d = state.checkout.details
-    const holder = d ? `${d.firstName} ${d.lastName}`.trim() : ''
-    return {
-      number: '4111 1111 1111 1111',
-      exp: '12 / 28',
-      cvv: '123',
-      name: holder || 'Omar Al Rashid',
-    }
-  })
+  const [card, setCard] = useState(() => ({
+    number: '4111 1111 1111 1111',
+    exp: '12 / 28',
+    cvv: '123',
+    name: source.holder || 'Omar Al Rashid',
+  }))
   const [errors, setErrors] = useState<Partial<Record<keyof typeof card, string>>>({})
 
   // 3-D Secure — in-app push approval, the way UAE banks do it now.
@@ -194,22 +248,22 @@ export default function PaymentPage() {
   // Snapshot the order at mount so the return leg can still show it after pay()
   // (or the hold expiring) clears the live cart.
   const [order] = useState(() => ({
-    items: state.cart.map((item) => ({ ...item })),
-    total: cartTotals.total,
-    phone: state.checkout.details?.phone ?? state.account?.phone ?? '+971 50 000 0000',
+    items: source.lines,
+    total: source.total,
+    phone: source.phone,
     reference: `GS-ORD-${Date.now().toString().slice(-8)}`,
   }))
 
   const cardDigits = digitsOf(card.number)
   const brand = brandOf(cardDigits)
   const willDecline = cardDigits.endsWith(DECLINE_SUFFIX)
-  const holdAlive = secondsLeft > 0 && state.cart.length > 0
+  const holdAlive = secondsLeft > 0 && cartCount > 0
 
   // If the hold runs out before the bank has approved anything, the transaction dies.
   const preAuth = phase === 'form' || phase === 'contacting' || phase === 'otp'
   useEffect(() => {
-    if (preAuth && !state.cart.length) setPhase('expired')
-  }, [preAuth, state.cart.length])
+    if (preAuth && !cartCount) setPhase('expired')
+  }, [preAuth, cartCount])
 
   // Timed legs of the journey. pay() runs inside the approved→returning timeout so it
   // fires exactly once; if the hold lapsed in flight it creates nothing, and we say so.
@@ -229,24 +283,12 @@ export default function PaymentPage() {
       })
     if (phase === 'approved')
       return after(1500, () => {
-        const references = pay()
-        if (references.length) setPhase('returning')
+        if (sourceRef.current.pay()) setPhase('returning')
         else setPhase('expired')
       })
     if (phase === 'returning')
-      return after(2000, () => {
-        // Back to whichever page was running the accordion, so the reference lands
-        // in the same place the booking was made rather than on a separate screen.
-        let back: string | null = null
-        try {
-          back = sessionStorage.getItem('gs:return-to')
-          sessionStorage.removeItem('gs:return-to')
-        } catch {
-          back = null
-        }
-        navigate(back ?? '/confirmation', { replace: true })
-      })
-  }, [phase, willDecline, pay, navigate])
+      return after(2000, () => navigate(sourceRef.current.returnTo(), { replace: true }))
+  }, [phase, willDecline, navigate])
 
   // The push notification "arrives on the phone" a beat after the bank page loads.
   useEffect(() => {
@@ -267,8 +309,8 @@ export default function PaymentPage() {
     return () => window.removeEventListener('beforeunload', warn)
   }, [inFlight])
 
-  if (!order.items.length) return <Navigate to="/cart" replace />
-  if (phase === 'handoff' && !state.checkout.waiverSigned) return <Navigate to="/waiver" replace />
+  if (!order.items.length) return <Navigate to={paths.cart} replace />
+  if (phase === 'handoff' && !source.waiverSigned) return <Navigate to={paths.waiver} replace />
 
   const submitCard = (e: FormEvent) => {
     e.preventDefault()
@@ -294,7 +336,7 @@ export default function PaymentPage() {
   }
 
   const cancelTransaction = () =>
-    navigate('/cart', { state: { notice: 'cancelled' }, replace: true })
+    navigate(paths.cart, { state: { notice: 'cancelled' }, replace: true })
 
   const tryAgain = () => {
     setCard((c) => ({ ...c, number: '', cvv: '' }))
@@ -337,7 +379,7 @@ export default function PaymentPage() {
             cancelled. <strong className="text-ink">No money has been taken.</strong> The courts have
             gone back on sale — pick your slots again.
           </p>
-          <button type="button" onClick={() => navigate('/cart', { replace: true })} className="btn btn-lg btn-primary mt-8 w-[300px]">
+          <button type="button" onClick={() => navigate(paths.cart, { replace: true })} className="btn btn-lg btn-primary mt-8 w-[300px]">
             Return to Glitch Sports
           </button>
         </div>
@@ -396,7 +438,7 @@ export default function PaymentPage() {
             )}
             <button
               type="button"
-              onClick={() => navigate('/cart', { state: { notice: 'failed' }, replace: true })}
+              onClick={() => navigate(paths.cart, { state: { notice: 'failed' }, replace: true })}
               className="btn btn-lg btn-outline w-full sm:w-[240px]"
             >
               Return to Glitch Sports
@@ -724,15 +766,11 @@ export default function PaymentPage() {
                     <span className="font-bold tabular-nums">{aed(order.total)}</span>
                   </div>
                   <div className="mt-2 space-y-1 border-t border-[#eee] pt-2">
-                    {order.items.map((item) => {
-                      const court = courtById(item.courtId)!
-                      return (
-                        <p key={item.id} className="text-[12px] text-[#777]">
-                          {court.name} · {formatShortDate(item.dateKey)} ·{' '}
-                          {rangeLabel(Math.min(...item.hours), item.hours.length)}
-                        </p>
-                      )
-                    })}
+                    {order.items.map((item) => (
+                      <p key={item.id} className="text-[12px] text-[#777]">
+                        {item.label}
+                      </p>
+                    ))}
                     <p className="pt-1 text-[12px] text-[#777]">
                       Slot held {formatCountdown(secondsLeft)}
                       {holdAlive ? '' : ' · expired'}

@@ -10,7 +10,7 @@ import { Chevron } from './ui'
 import { formatCountdown, useStore } from '../store/StoreProvider'
 
 /** Brand glyphs for the footer. Sized by the parent, filled with currentColor. */
-const SOCIAL_ICONS: Record<string, React.ReactNode> = {
+export const SOCIAL_ICONS: Record<string, React.ReactNode> = {
   instagram: (
     <>
       <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -524,6 +524,12 @@ export default function Layout() {
         </main>
         <Footer flush={onHome} />
         <WhatsAppFab />
+        <Link
+          to="/semnox"
+          className="fixed bottom-6 left-6 z-40 inline-flex h-11 items-center gap-2 rounded-full border-2 border-ink bg-white px-4 text-[13px] font-extrabold uppercase tracking-[0.08em] text-ink shadow-[4px_4px_0_0_#0d0d10] transition hover:-translate-x-0.5 hover:-translate-y-0.5"
+        >
+          Semnox flow →
+        </Link>
         {MODAL_FLOW && <BookingSurface />}
       </div>
     </CheckoutPanelProvider>
