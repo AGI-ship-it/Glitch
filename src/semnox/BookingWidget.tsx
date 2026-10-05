@@ -21,7 +21,7 @@ export default function BookingWidget({
   onAdd: () => void
 }) {
   const stepBtn =
-    'grid h-10 w-10 place-items-center rounded-sx-pill bg-white text-sx-widget-media transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100'
+    'grid h-10 w-10 short:h-8 short:w-8 place-items-center rounded-sx-pill bg-white text-sx-widget-media transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100'
 
   return (
     <article className="w-full max-w-[360px] rounded-sx-card bg-sx-widget p-sx-sm text-left shadow-[var(--sx-shadow-widget)] backdrop-blur">
@@ -34,21 +34,23 @@ export default function BookingWidget({
         className="block h-auto w-full rounded-sx-widget-media"
       />
 
-      <div className="px-sx-sm pb-sx-sm pt-sx-md sm:px-sx-md">
-        <h2 className="sx-display text-center text-[22px] leading-[1.05] sm:text-[26px]">
+      <div className="px-sx-sm pb-sx-sm pt-sx-md sm:px-sx-md short:pb-sx-xs short:pt-sx-sm">
+        <h2 className="sx-display text-center text-[22px] leading-[1.05] sm:text-[26px] short:whitespace-nowrap short:text-[19px]">
           Court booking
-          <span className="block text-sx-hot">from {aed(unit).replace('.00', '')}</span>
+          <span className="block text-sx-hot short:inline">
+            <span className="hidden short:inline"> · </span>from {aed(unit).replace('.00', '')}
+          </span>
         </h2>
-        <p className="mt-sx-xs text-center text-sx-body-sm text-sx-widget-muted">Priced per hour · same rate on every court</p>
+        <p className="mt-sx-xs text-center text-sx-body-sm text-sx-widget-muted short:mt-0 short:text-sx-caption">Priced per hour · same rate on every court</p>
 
         {/* Courts inset */}
-        <div className="mt-sx-md rounded-sx-inset bg-sx-widget-inset px-sx-sm py-sx-sm ring-1 ring-sx-widget-line sm:px-sx-md">
+        <div className="mt-sx-md rounded-sx-inset bg-sx-widget-inset px-sx-sm py-sx-sm ring-1 ring-sx-widget-line sm:px-sx-md short:mt-sx-sm short:py-sx-xs">
           <div className="flex items-center justify-between gap-sx-md">
             <p>
-              <span id="sx-courts-label" className="block text-sx-body-md text-white">
+              <span id="sx-courts-label" className="block text-sx-body-md text-white short:text-sx-body-sm">
                 How many courts?
               </span>
-              <span className="whitespace-nowrap text-sx-body-sm tabular-nums text-sx-widget-muted">{aed(unit)} per hour</span>
+              <span className="whitespace-nowrap text-sx-body-sm tabular-nums text-sx-widget-muted short:text-sx-caption">{aed(unit)} per hour</span>
             </p>
             <div role="group" aria-labelledby="sx-courts-label" className="flex items-center rounded-sx-pill bg-black/25 p-1">
               <button type="button" aria-label="Fewer courts" disabled={quantity <= 1} onClick={() => onQuantity(quantity - 1)} className={stepBtn}>
@@ -67,21 +69,21 @@ export default function BookingWidget({
             </div>
           </div>
           {/* Quantity is courts, not players — the commonest mistake on this step. */}
-          <p aria-live="polite" className="mt-sx-sm border-t border-sx-widget-line pt-sx-sm text-sx-caption text-sx-widget-muted">
+          <p aria-live="polite" className="mt-sx-sm border-t border-sx-widget-line pt-sx-sm text-sx-caption text-sx-widget-muted short:mt-sx-xs short:pt-sx-xs">
             {quantity === 1
               ? 'Next, pick as many hours as you like on your court.'
               : `Next, pick as many hours as you like on each of your ${quantity} courts.`}
           </p>
         </div>
 
-        <div className="mt-sx-md flex items-baseline justify-between px-1">
-          <span className="text-sx-body-sm uppercase tracking-[0.06em] text-sx-widget-muted">From, per hour</span>
-          <span aria-live="polite" className="text-[22px] font-extrabold tabular-nums leading-none sm:text-[26px]">
+        <div className="mt-sx-md flex items-baseline justify-between px-1 short:mt-sx-sm">
+          <span className="text-sx-body-sm uppercase tracking-[0.06em] text-sx-widget-muted short:text-sx-caption">From, per hour</span>
+          <span aria-live="polite" className="text-[22px] font-extrabold tabular-nums leading-none sm:text-[26px] short:text-[22px]">
             {aed(unit * quantity)}
           </span>
         </div>
 
-        <button type="button" onClick={onAdd} className="sx-btn sx-btn-primary mt-sx-md w-full">
+        <button type="button" onClick={onAdd} className="sx-btn sx-btn-primary mt-sx-md w-full short:mt-sx-sm">
           Add to cart
         </button>
       </div>

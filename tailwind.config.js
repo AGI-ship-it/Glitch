@@ -91,6 +91,10 @@ export default {
       fontFamily: {
         sans: ['Gantari', 'Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
       },
+      screens: {
+        // Laptop-height desktops (e.g. 1440×900): tighter type and spacing.
+        short: { raw: '(min-width: 1024px) and (max-height: 960px)' },
+      },
       maxWidth: {
         shell: '1200px',
       },
