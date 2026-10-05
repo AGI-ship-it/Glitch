@@ -53,13 +53,13 @@ export default function HomeScreen() {
     <section className="relative flex flex-1 flex-col overflow-hidden">
       <CourtLines />
 
-      <div className="relative mx-auto flex w-full max-w-[460px] flex-1 flex-col items-center px-sx-md pb-sx-md pt-sx-lg text-center">
+      <div className="relative mx-auto flex w-full max-w-[460px] flex-1 flex-col items-center px-sx-md pb-sx-xl pt-sx-md text-center sm:pt-sx-lg md:pb-sx-2xl">
 
-        <h1 className="sx-display text-sx-display-lg">Book a court</h1>
-        <span className="sx-stripe mt-sx-md" aria-hidden="true" />
+        <h1 className="sx-display text-[30px] sm:text-[36px] lg:text-sx-display-lg">Book a court</h1>
+        <span className="sx-stripe mt-sx-sm sm:mt-sx-md" aria-hidden="true" />
 
         {/* Title sits where every other screen's does; the booking follows close under it. */}
-        <div className="flex w-full flex-1 flex-col items-center pt-sx-md">
+        <div className="flex w-full flex-1 flex-col items-center pt-sx-md sm:pt-sx-lg">
           <div>
             <DatePicker
               label="Booking date"
@@ -70,7 +70,7 @@ export default function HomeScreen() {
             />
           </div>
 
-          <div className="mt-sx-md flex w-full justify-center">
+          <div className="mt-sx-md flex w-full justify-center sm:mt-sx-lg">
             <BookingWidget
               unit={unit}
               quantity={quantity}

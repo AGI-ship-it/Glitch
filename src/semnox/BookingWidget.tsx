@@ -1,30 +1,11 @@
 import { aed } from '../mocks/semnox'
 
 /**
- * The Court booking product card, built from the Article.svg design: a split
- * basketball / volleyball photo cut on a pink diagonal, the title, a courts
+ * The Court booking product card, built from the Article.svg design: the
+ * game.svg photo band, the title, a courts
  * stepper in an inset panel, the line total and Add to cart (our sticker button).
+ * Fixed at the design's 360px width; on short screens the page scrolls rather than squeezing it.
  */
-
-/** The diagonal runs from 56% across the top to 44% across the bottom. */
-const LEFT_CUT = 'polygon(0 0, 56% 0, 44% 100%, 0 100%)'
-const RIGHT_CUT = 'polygon(56% 0, 100% 0, 100% 100%, 44% 100%)'
-
-/** Written out in full so the Pages build can prefix them with the site base. */
-const SPORT_ICON = { basketball: '/semnox/icon-basketball.svg', volleyball: '/semnox/icon-volleyball.svg' }
-
-function SportPill({ sport, side }: { sport: 'basketball' | 'volleyball'; side: 'left' | 'right' }) {
-  return (
-    <span
-      className={`absolute bottom-[10px] flex h-[24.5px] items-center gap-1.5 rounded-sx-pill bg-[rgba(23,8,56,0.85)] pl-2 pr-3 text-[11px] font-medium uppercase tracking-[0.06em] text-white backdrop-blur ${
-        side === 'left' ? 'left-[10px]' : 'right-[10px]'
-      }`}
-    >
-      <img src={SPORT_ICON[sport]} alt="" width={16} height={16} />
-      {sport}
-    </span>
-  )
-}
 
 export default function BookingWidget({
   unit,
@@ -44,37 +25,24 @@ export default function BookingWidget({
 
   return (
     <article className="w-full max-w-[360px] rounded-sx-card bg-sx-widget p-sx-sm text-left shadow-[var(--sx-shadow-widget)] backdrop-blur">
-      {/* Photo band */}
-      <div className="relative h-[clamp(64px,calc(100svh-770px),193.5px)] overflow-hidden rounded-sx-widget-media bg-sx-widget-media">
-        <div className="absolute inset-0" style={{ clipPath: LEFT_CUT }}>
-          <img src="/semnox/basketball.jpg" alt="A basketball player driving to the hoop" className="h-full w-[56%] object-cover" />
-          <SportPill sport="basketball" side="left" />
-        </div>
-        <div className="absolute inset-0" style={{ clipPath: RIGHT_CUT }}>
-          <img
-            src="/semnox/volleyball.jpg"
-            alt="A volleyball player spiking at the net"
-            className="absolute right-0 h-full w-[56%] object-cover"
-          />
-          <SportPill sport="volleyball" side="right" />
-        </div>
-        <svg aria-hidden="true" className="absolute inset-0 h-full w-full" viewBox="0 0 344 193.5" preserveAspectRatio="none">
-          <line x1="192.64" y1="0" x2="151.36" y2="193.5" stroke="var(--sx-color-hot)" strokeWidth="3.125" />
-        </svg>
-        <span className="absolute left-1/2 top-[10px] -translate-x-1/2 rounded-sx-pill bg-sx-badge px-sx-sm text-[11px] font-medium uppercase leading-[24.5px] tracking-[0.04em] text-sx-widget-media">
-          60 min
-        </span>
-      </div>
+      {/* Photo band — the design's own artwork (basketball / volleyball split). */}
+      <img
+        src="/semnox/game.svg"
+        alt="Basketball and volleyball — every court suits either game"
+        width={344}
+        height={276}
+        className="block h-auto w-full rounded-sx-widget-media"
+      />
 
-      <div className="px-sx-md pb-sx-sm pt-sx-sm">
-        <h2 className="sx-display text-center text-[clamp(22px,2.4vw,26px)] leading-[1.05]">
+      <div className="px-sx-sm pb-sx-sm pt-sx-md sm:px-sx-md">
+        <h2 className="sx-display text-center text-[22px] leading-[1.05] sm:text-[26px]">
           Court booking
           <span className="block text-sx-hot">from {aed(unit).replace('.00', '')}</span>
         </h2>
         <p className="mt-sx-xs text-center text-sx-body-sm text-sx-widget-muted">Priced per hour · same rate on every court</p>
 
         {/* Courts inset */}
-        <div className="mt-sx-md rounded-sx-inset bg-sx-widget-inset px-sx-md py-sx-sm ring-1 ring-sx-widget-line">
+        <div className="mt-sx-md rounded-sx-inset bg-sx-widget-inset px-sx-sm py-sx-sm ring-1 ring-sx-widget-line sm:px-sx-md">
           <div className="flex items-center justify-between gap-sx-md">
             <p>
               <span id="sx-courts-label" className="block text-sx-body-md text-white">
@@ -106,9 +74,9 @@ export default function BookingWidget({
           </p>
         </div>
 
-        <div className="mt-sx-sm flex items-baseline justify-between px-1">
+        <div className="mt-sx-md flex items-baseline justify-between px-1">
           <span className="text-sx-body-sm uppercase tracking-[0.06em] text-sx-widget-muted">From, per hour</span>
-          <span aria-live="polite" className="text-[24px] font-extrabold tabular-nums leading-none">
+          <span aria-live="polite" className="text-[22px] font-extrabold tabular-nums leading-none sm:text-[26px]">
             {aed(unit * quantity)}
           </span>
         </div>
